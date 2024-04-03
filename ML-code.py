@@ -5,21 +5,15 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Bidirectional, LSTM, Dropout, Dense, Activation
 from tensorflow.keras.optimizers import Adam
 
-# Load dataset
-lotto_data = pd.read_csv("Lotto.csv")
 
-# Parameters
+data = pd.read_csv("data.csv")
 window_length = 4
 num_features = lotto_data.shape[1] - 1  # Excluding the date column
-
-# Prepare data
 training_data = lotto_data.drop(columns=['Date']).copy()
 
-# Normalize data
 scaler = StandardScaler()
 scaled_training_data = scaler.fit_transform(training_data)
 
-# Prepare training samples and labels
 train_samples = []
 train_labels = []
 for i in range(len(training_data) - window_length):
@@ -29,7 +23,6 @@ for i in range(len(training_data) - window_length):
 x_train = np.array(train_samples)
 y_train = np.array(train_labels)
 
-# Define the model
 model = Sequential([
     Bidirectional(LSTM(160, input_shape=(window_length, num_features), return_sequences=True)),
     Activation('relu'),
