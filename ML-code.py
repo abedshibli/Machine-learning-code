@@ -40,18 +40,16 @@ model = Sequential([
     Dense(num_features)
 ])
 
-# Compile the model
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='mse', metrics=['accuracy'])
 
-# Train the model
+
 model.fit(x_train, y_train, batch_size=160, epochs=25000, verbose=1)
 
-# Make predictions
+
 next_data = training_data.drop(columns=['Date']).head(window_length)
 next_data_scaled = scaler.transform(next_data)
 y_next_pred = model.predict(np.array([next_data_scaled]))
 
-# Invert scaling and print predictions
 predicted_numbers = scaler.inverse_transform(y_next_pred).astype(int)[0]
 print("The predicted numbers (without rounding up):", predicted_numbers - 1)
 print("The predicted numbers (without rounding up):", predicted_numbers)
